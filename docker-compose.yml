@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  kx-bg-location-console:
+    container_name:
+      kx-bg-location-console
+    hostname:
+      console
+    image:
+      gcr.io/epoch-906/kx_bg_geolocation_console:1
+    ports:
+     - "9000:9000"
+    networks:
+     - web
+    environment:
+      LANG: C.UTF-8
+    volumes:
+     - ${PWD}/db/background-geolocation.db:/srv/background-geolocation-console/src/server/database/background-geolocation.db
+     - /tmp:/hostTmp
+networks:
+  web:
+
