@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  bg-location-console:
+    container_name:
+      bg-location-console
+    hostname:
+      console
+    image:
+      gcr.io/epoch-906/kx_bg_geolocation_console:test
+    networks:
+      - web
+    environment:
+      LANG: C.UTF-8
+      GOOGLE_MAPS_API_KEY: LONG_STRING
+    volumes:
+      - ${PWD}/db:/srv/background-geolocation-console/src/server/database/db
+      - /tmp:/hostTmp
+  console-proxy:
+    container_name:
+      console-proxy
+    hostname:
+      proxy
+    image:
+      nginx:1.15.8-alpine
+    ports:
+      - "80:80"
+    networks:
+      - web
+    volumes:
+      - /tmp:/hostTmp
+      - ${PWD}/nginx:/etc/nginx/conf.d
+    depends_on:
+      - bg-location-console
+    links:
+      - bg-location-console:console
+networks:
+  web:
+
